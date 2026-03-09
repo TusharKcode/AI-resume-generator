@@ -1,0 +1,41 @@
+CREATE DATABASE ai_resume_builder;
+USE ai_resume_builder;
+
+CREATE TABLE users(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE resumes(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    title VARCHAR(200),
+    template_name VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE resume_sections(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    resume_id INT,
+    section_name VARCHAR(100),
+    content JSON,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (resume_id) REFERENCES resumes(id) ON DELETE CASCADE
+);
+
+CREATE TABLE ai_generated_content(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    resume_id INT,
+    section_name VARCHAR(100),
+    ai_text TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (resume_id) REFERENCES resumes(id) ON DELETE CASCADE
+);
+
+SHOW TABLES;
+
