@@ -3,6 +3,7 @@ import cors from "cors"
 import dotenv from "dotenv"
 import db from "./config/db.js"
 import authRoutes from "./routes/authRoutes.js"
+import resumeRoutes from "./routes/resumeRoutes.js"
 
 dotenv.config()
 
@@ -12,6 +13,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/api/auth", authRoutes)
+app.use("/api/resume", resumeRoutes);
 
 // Test Route
 app.get("/", (req, res) => {
