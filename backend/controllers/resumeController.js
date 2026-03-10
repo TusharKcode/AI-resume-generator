@@ -1,5 +1,5 @@
-import { createResumeModel, getUserResumesModel } from "../models/resumeModel";
-import { saveSectionModel } from "../models/sectionModel";
+import { createResumeModel, getUserResumesModel } from "../models/resumeModel.js";
+import { saveSectionModel } from "../models/sectionModel.js";
 
 export const createResume = (req, res) => {
     const userId = req.user.id;
