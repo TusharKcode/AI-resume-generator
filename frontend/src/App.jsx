@@ -5,7 +5,6 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import ResumeBuilder from "./pages/resume/ResumeBuilder";
 import './App.css'
 
-
 function App() {
   return (
     <BrowserRouter>
