@@ -22,7 +22,7 @@ function App() {
           }
         />
         <Route
-          path="/resume-builder" 
+          path="/resume-builder/:resumeId" 
           element={
             <ProtectedRoutes>
               <ResumeBuilder/>
