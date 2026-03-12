@@ -14,7 +14,7 @@ function Register() {
 
   const handleChange = (e) => {
     setFormData({
-      ...formData, [e.target.value]: e.target.value
+      ...formData, [e.target.name]: e.target.value
     });
   };
 
