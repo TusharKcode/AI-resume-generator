@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { saveResumesSection } from "../../services/resumeService";
 import { generateAIContent } from "../../services/aiService"
 
 function ResumeBuilder(){
-
+    const navigate = useNavigate();
     const {resumeId} = useParams();
     const [summary, setSummary] = useState("");
 
@@ -61,6 +61,10 @@ function ResumeBuilder(){
 
             <button onClick={handleGenerateAI}>
                 Generate with AI
+            </button>
+
+            <button onClick={() => navigate(`/resume/${resumeId}`)}>
+                Review Resume
             </button>
         </div>
     )

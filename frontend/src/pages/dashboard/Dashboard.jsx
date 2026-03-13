@@ -22,6 +22,7 @@ function Dashboard() {
     logoutUser();
     navigate("/login")
   }
+
   return (
     <div style={{padding:"30px"}}>
       <h1>Welcome to AI Resume Generator Dashboard</h1>

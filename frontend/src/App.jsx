@@ -5,6 +5,7 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import ResumeBuilder from "./pages/resume/ResumeBuilder";
 import './App.css'
 import ProtectedRoutes from "./components/ProtectedRoutes";
+import ResumePreviewPage from "./pages/resume/ResumePreviewPage";
 
 function App() {
   return (
@@ -27,6 +28,13 @@ function App() {
             <ProtectedRoutes>
               <ResumeBuilder/>
             </ProtectedRoutes>
+          }
+        />
+
+        <Route
+          path="/resume/:id" 
+          element={
+            <ResumePreviewPage/>
           }
         />
       </Routes>
