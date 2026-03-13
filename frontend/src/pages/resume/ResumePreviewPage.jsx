@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getResumeById } from "../../services/resumeService"
+import html2canvas from "html2canvas"
+import jsPDF from "jspdf"
 
 const ResumePreviewPage = () => {
     const {id} = useParams();
@@ -25,8 +27,23 @@ const ResumePreviewPage = () => {
         return <p>Loading...</p>
     }
 
+    const downloadPDF = async () => {
+        const element = document.getElementById("resume-preview")
+        const canvas = await html2canvas(element)
+        const imgData = canvas.toDataURL("image/png")
+        const pdf = new jsPDF()
+
+        const imgWidth = 190
+        // const pageHeight = 295
+
+        const imgHeight = (canvas.height * imgWidth) / canvas.width
+        pdf.addImage(imgData, "PDF", 10, 10, imgWidth, imgHeight)
+        pdf.save("resume.pdf")
+    }
+
     return (
-        <div className='max-w-4xl mx-auto bg-white shadow p-8'>
+        <>
+        <div id='resume-preview' className='max-w-4xl mx-auto bg-white shadow p-8'>
             <h1 className="text-3xl font-bold">{resume.personalInfo?.name}</h1>
             <p>{resume.personalInfo?.email}</p>
             <p>{resume.personalInfo?.phone}</p>
@@ -67,6 +84,11 @@ const ResumePreviewPage = () => {
                 ))}
             </div>
         </div>
+        <br />
+        <button className='bg-green-600 text-white px-4 py-2 rounded mb-4' onClick={downloadPDF}>
+                Download PDF
+        </button>
+        </>
     )
 }
 
