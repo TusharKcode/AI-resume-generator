@@ -13,7 +13,37 @@ const ResumePreviewPage = () => {
         try {
             if(!id) return;
             const res = await getResumeById(id);
-            setResume(res.data)
+
+            const data = res.data
+            const sections = data.sections || []
+            
+            let summary = "";
+            let skills = [];
+            let education = [];
+            let projects = [];
+
+            sections.forEach((section) => {
+                if (section.section_name === "summary") {
+                    summary = section.content;
+                }
+                if (section.section_name === "skills") {
+                    const parsed = JSON.parse(section.content || "{}")
+                    skills = parsed.skills || []
+                }
+                if (section.section_name === "education") {
+                    const parsed = JSON.parse(section.content || "{}")
+                    education = parsed.education || []
+                }
+                if (section.section_name === "projects") {
+                    const parsed = JSON.parse(section.content || "{}")
+                    projects = parsed.projects || []
+                }
+            });
+
+            setResume({
+                ...data.resume,
+                careerObjective : summary, skills, education, projects
+            })
         } catch (error) {
             console.error(error);
         }
@@ -37,7 +67,7 @@ const ResumePreviewPage = () => {
         // const pageHeight = 295
 
         const imgHeight = (canvas.height * imgWidth) / canvas.width
-        pdf.addImage(imgData, "PDF", 10, 10, imgWidth, imgHeight)
+        pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight)
         pdf.save("resume.pdf")
     }
 

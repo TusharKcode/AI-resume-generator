@@ -58,3 +58,25 @@ export const getResumeById = async (req, res) =>{
         })
     }
 }
+
+export const saveSkills = async (req, res) => {
+    try {
+        const [resumeId, skills] = req.body
+        const content = JSON.stringify({skills})
+        await db.query(
+            `INSERT INTO resumes_sections (resume_id, section_name, content)
+            VALUES (?, 'skills', ?)
+            ON DUPLICATE KEY UPDATE content = ?`,
+            [resumeId, content, content]
+        );
+
+        res.json({
+            message: "Skills saved successfully"
+        })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            message:"Error saving skills"
+        })
+    }
+}
