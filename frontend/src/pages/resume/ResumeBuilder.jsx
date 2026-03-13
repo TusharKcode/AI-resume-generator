@@ -1,11 +1,27 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { saveResumesSection } from "../../services/resumeService";
+import { generateAIContent } from "../../services/aiService"
 
 function ResumeBuilder(){
 
     const {resumeId} = useParams();
     const [summary, setSummary] = useState("");
+
+    const handleGenerateAI = async () => {
+        try {
+            const data = await generateAIContent({
+                section:"summary",
+                userData: "Software developer skilled in Java, React and backend development",
+                resumeId: resumeId
+            })
+
+            setSummary(data.aiText);
+        } catch (error) {
+            console.error(error);
+            alert("AI generation failed")
+        }
+    }
 
     const handleSave = async () => {
         try {
@@ -41,6 +57,10 @@ function ResumeBuilder(){
 
             <button onClick={handleSave}>
                 Save Summary
+            </button>
+
+            <button onClick={handleGenerateAI}>
+                Generate with AI
             </button>
         </div>
     )
