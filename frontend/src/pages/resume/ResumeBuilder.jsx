@@ -8,8 +8,14 @@ function ResumeBuilder(){
     const navigate = useNavigate();
     const {resumeId} = useParams();
     const [summary, setSummary] = useState("");
-    const [skill, setSkill] = useState([])
-    const [skills, setSkills] = useState("")
+
+    const [skill, setSkill] = useState([]);
+    const [skills, setSkills] = useState("");
+
+    const [degree, setDegree] = useState("");
+    const [institution, setInstitution] = useState("");
+    const [year, setYear] = useState("");
+    const [educationList, setEducationList] = useState([]);
 
     const handleGenerateAI = async () => {
         try {
@@ -49,7 +55,27 @@ function ResumeBuilder(){
         await axios.post("/api/resume/skills", {
             resumeId, skills
         })
-        alert("Skills saved!")
+        alert("Skills details saved!")
+    }
+
+    const addEducation = () => {
+        if(!degree || !institution || !year) return;
+
+        const newEducation = {
+            degree, institution, year
+        }
+
+        setEducationList([...educationList, newEducation])
+        setDegree("")
+        setInstitution("")
+        setYear("")
+    }
+    const saveEducation = async () => {
+        await axios.post("/api/resume/education", {
+            resumeId,
+            education: educationList
+        });
+        alert("Education details saved!")
     }
 
     return(
@@ -57,6 +83,8 @@ function ResumeBuilder(){
             <h2>Resume Builder</h2>
             
             <p>Resume ID: {resumeId}</p>
+
+            {/* SUMMARY SECTION */}
             <h3>Professional Summary</h3>
             <textarea
                 rows="6"
@@ -72,6 +100,7 @@ function ResumeBuilder(){
             </button>
             <br />
 
+            {/* SKILLS Detail SECTION */}
             <h2>Skills Section</h2>
             <input
                 type="text" 
@@ -87,6 +116,31 @@ function ResumeBuilder(){
                 ))}
             </ul>
             <button onClick={saveSkills}>Save Skills</button>
+            <br />
+
+            {/* EDUCATION Detail SECTION */}
+            <h2>Education</h2>
+            <input
+                placeholder="Degree" 
+                value={degree} 
+                onChange={(e) => setDegree(e.target.value)} />
+            <input
+                placeholder="Institution" 
+                value={institution} 
+                onChange={(e) => setInstitution(e.target.value)} />
+            <input
+                placeholder="Year" 
+                value={year} 
+                onChange={(e) => setYear(e.target.value)} />
+            <button onClick={addEducation}>Add Education</button>
+            <ul>
+                {educationList.map((edu, i) => (
+                    <li key={i}>
+                        {edu.degree} - {edu.institution} {edu.year}
+                    </li>
+                ))}
+            </ul>
+            <button onClick={saveEducation}>Save Education</button>
 
             <br />
             <button onClick={handleGenerateAI}>
