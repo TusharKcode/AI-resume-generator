@@ -102,3 +102,47 @@ export const saveEducation = async(req, res) => {
         })
     }
 }
+
+export const saveProjects = async(req, res) => {
+    try {
+        const [resumeId, projects] = req.body
+        const content = JSON.stringify({projects})
+
+        await db.query(
+            `INSERT INTO resume_sections (resume_id, section_name, content)
+            VALUES (?, 'projects', ?)
+            ON DUPLICATE KEY UPDATE content = ?`,
+            [resumeId, content, content]
+        )
+        res.json({
+            message: "Projects saved successfully"
+        })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            message:"Error saving projects"
+        })
+    }
+}
+
+export const saveSection = async(req, res) => {
+    try {
+        const [resumeId, sectionName, content] = req.body
+        const jsonContent = JSON.stringify(content)
+
+        await db.query(
+            `INSERT INTO resume_sections (resume_id, section_name, content)
+            VALUES (?, ?, ?)
+            ON DUPLICATE KEY UPDATE content = ?`,
+            [resumeId, sectionName, jsonContent, jsonContent]
+        )
+        res.json({
+            message: `${sectionName} saved successfully`
+        })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            message:"Error saving section"
+        })
+    }
+}
