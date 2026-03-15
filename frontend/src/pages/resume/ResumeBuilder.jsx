@@ -17,6 +17,11 @@ function ResumeBuilder(){
     const [year, setYear] = useState("");
     const [educationList, setEducationList] = useState([]);
 
+    const [projectTitle, setProjectTitle] = useState("");
+    const [projectDescription, setProjectDescription] = useState("");
+    const [projectTechStack, setProjectTechStack] = useState("");
+    const [projectList, setProjectList] = useState([]);
+
     const handleGenerateAI = async () => {
         try {
             const data = await generateAIContent({
@@ -76,6 +81,28 @@ function ResumeBuilder(){
             education: educationList
         });
         alert("Education details saved!")
+    }
+
+    const addProject = () => {
+        if (!projectTitle || !projectDescription || !projectTechStack) return;
+
+        const newProject = {
+            title: projectTitle, 
+            description: projectDescription,
+            techStack: projectTechStack
+        }
+
+        setProjectList([...projectList, newProject])
+        setProjectTitle("")
+        setProjectDescription("")
+        setProjectTechStack("")
+    }
+    const saveProject = async () => {
+        await axios.post("/api/resume/projects", {
+            resumeId,
+            projects: projectList
+        })
+        alert("Project saved successfully")
     }
 
     return(
@@ -141,6 +168,32 @@ function ResumeBuilder(){
                 ))}
             </ul>
             <button onClick={saveEducation}>Save Education</button>
+            <br />
+            
+            {/* PROJECT Detail SECTION */}
+            <h2>Education</h2>
+            <input
+                placeholder="Project Title" 
+                value={projectTitle} 
+                onChange={(e) => setProjectTitle(e.target.value)} />
+            <textarea
+                placeholder="Project Description" 
+                value={projectDescription} 
+                onChange={(e) => setProjectDescription(e.target.value)} />
+            <input
+                placeholder="Project Tech Stack" 
+                value={projectTechStack} 
+                onChange={(e) => setProjectTechStack(e.target.value)} />
+
+            <button onClick={addProject}>Add Project</button>
+            <ul>
+                {projectList.map((proj, i) => (
+                    <li key={i}>
+                        <b>{proj.title}</b> - {proj.description} ({proj.techStack})
+                    </li>
+                ))}
+            </ul>
+            <button onClick={saveProject}>Save Projects</button>
 
             <br />
             <button onClick={handleGenerateAI}>
